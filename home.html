@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drowsiness Detection System</title>
+    <style>
+        :root {
+            --gold-gradient: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --crystal-white: rgba(255, 255, 255, 0.9);
+            --bg-color: #fdfdfd;
+        }
+        body {
+            margin: 0;
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden; /* Mobile side scroll rokne ke liye */
+            padding: 20px;
+            box-sizing: border-box;
+            /* Mobile tap highlight remove */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .heading {
+            color: #8a6d00;
+            text-transform: uppercase;
+            letter-spacing: clamp(2px, 2vw, 10px); /* Responsive spacing */
+            margin-bottom: 30px;
+            font-weight: 900;
+            font-size: clamp(1.5rem, 8vw, 4rem); /* Mobile par size chota hoga */
+            text-align: center;
+        }
+
+        /* --- OUTER BUTTONS --- */
+        .external-nav {
+            display: flex;
+            flex-wrap: wrap; /* Mobile par buttons niche aa jayenge */
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: 2px solid #bf953f;
+            border-radius: 30px;
+            background: white;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-btn:hover {
+            background: var(--gold-gradient);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(191, 149, 63, 0.4);
+        }
+
+        /* --- BIGG BOSS STYLE EYE SHAPE --- */
+        .eye-frame {
+            position: relative;
+            width: 100%;
+            max-width: 700px; /* Laptop size */
+            aspect-ratio: 2 / 1; /* Aspect ratio maintain rakhega */
+            background: var(--gold-gradient);
+            clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .eye-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: white;
+            clip-path: polygon(0% 50%, 50% 5%, 100% 50%, 50% 95%);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- BLINK ANIMATION (FASTER) --- */
+        .eyelid {
+            position: absolute;
+            top: -110%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #eee;
+            z-index: 10;
+            border-bottom: 5px solid #bf953f;
+            /* 4s se kam karke 2.5s kiya hai (Fast blink) */
+            animation: fastBlink 2.5s infinite ease-in-out;
+        }
+
+        @keyframes fastBlink {
+            0%, 85%, 100% { top: -110%; }
+            90%, 95% { top: 0%; }
+        }
+
+        /* --- THE IRIS --- */
+        .iris-container {
+            position: relative;
+            z-index: 5;
+            width: clamp(100px, 30vw, 200px); /* Responsive Iris */
+            height: clamp(100px, 30vw, 200px);
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            padding: 8px;
+            box-shadow: 0 0 30px rgba(191, 149, 63, 0.5);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .about-link {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #b38728;
+            font-size: clamp(1rem, 4vw, 1.8rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .about-link:hover {
+            background: var(--gold-gradient);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .eye-inner::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-conic-gradient(from 0deg, transparent 0deg 10deg, rgba(191, 149, 63, 0.1) 10deg 20deg);
+            z-index: 1;
+        }
+        
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1); /* Transparent glass effect */
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        color: #555;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .batch-highlight {
+        color: #8a6d00; /* Dark Gold */
+        font-weight: bold;
+        text-transform: uppercase;
+        /* Halka sa glow effect */
+        text-shadow: 0 0 8px rgba(186, 149, 63, 0.4);
+    }
+
+    /* Mobile screen par footer chota dikhe */
+    @media (max-width: 600px) {
+        .footer {
+            font-size: 0.8rem;
+            padding: 10px;
+        }
+    }
+
+
+
+        
+
+    </style>
+</head>
+<body>
+
+    <h1 class="heading">Drowsiness Detection System</h1>
+
+    <div class="external-nav">
+        <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
+        <a href="{{ url_for('registration') }}" class="nav-btn">Registration</a>
+        <a href="{{ url_for('admin_login') }}" class="nav-btn">Admin</a>
+    </div>
+
+    <div class="eye-frame">
+        <div class="eye-inner">
+            <div class="eyelid"></div>
+
+            <div class="iris-container">
+                <a href="{{ url_for('about') }}" class="about-link">About</a>
+            </div>
+        </div>
+    </div>
+<footer class="footer">
+    <p>Developed by 💻 | <span class="batch-highlight">B3 Batch</span> &copy; 2026</p>
+</footer>
+</body>
+</html>

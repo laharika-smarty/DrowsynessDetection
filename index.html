@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drowsiness Detection</title>
+
+    <style>
+        
+        :root {
+            --gold-gradient: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728);
+            --dark-gold: #8a6d00;
+        }
+
+        /* Outline/Box Fix */
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4; /* Same as login.html */
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            width: 100%;
+            max-width: 700px;
+            border-top: 6px solid #bf953f; /* Gold Border */
+        }
+
+        h1 {
+            color: var(--dark-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+        }
+
+        .video-box {
+            width: 100%;
+            background: #000;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+        }
+
+        #video_feed {
+            width: 100%;
+            height: 100%;
+            display: none;
+            object-fit: cover;
+        }
+
+        .status {
+            margin: 15px 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--dark-gold);
+        }
+
+        .drowsy-alert {
+            color: #ff4d4d;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* --- GOLDEN BUTTONS --- */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: 2px solid #bf953f;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            font-size: 0.85rem;
+            background: white;
+            color: var(--dark-gold);
+        }
+
+        .btn-start:hover:not(:disabled) {
+            background: var(--gold-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(191, 149, 63, 0.4);
+        }
+
+        .btn-stop {
+            border: 2px solid #888;
+            color: #888;
+        }
+
+        .btn-stop:hover:not(:disabled) {
+            background: #888;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--dark-gold);
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #bf953f;
+        }
+    </style>
+</head>
+<body>
+<script>
+    function startGPSTracking() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition((position) => {
+                fetch('/update_location', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    })
+                });
+            }, (error) => { console.log("GPS Error: ", error); }, 
+            { enableHighAccuracy: true });
+        }
+    }
+
+    // Call this when the page loads
+    document.addEventListener("DOMContentLoaded", startGPSTracking);
+
+    // Regular status checker to show alerts on screen
+    setInterval(() => {
+        fetch('/status')
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "DROWSY") {
+                    alert("DROWSINESS DETECTED! Alert sent to email.");
+                }
+            });
+    }, 5000);
+</script>
+    <div class="card">
+        <h1>Drowsiness Detection</h1>
+
+        <div class="video-box">
+            <span id="placeholder" style="color: #888; font-style: italic;">System Standby</span>
+            <img id="video_feed" src="">
+        </div>
+
+        <div id="statusText" class="status">
+            STATUS: <span id="val">READY</span>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-start" id="startBtn" onclick="startStream()">Start Monitoring</button>
+            <button class="btn btn-stop" id="stopBtn" onclick="stopStream()" disabled>Stop</button>
+        </div>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout System</a>
+
+    <script>
+        let isSpeaking = false;
+        let poll;
+
+        function speakAlert() {
+            if (!isSpeaking) {
+                let msg = new SpeechSynthesisUtterance("Wake up!");
+                isSpeaking = true;
+                msg.onend = () => { isSpeaking = false; };
+                speechSynthesis.speak(msg);
+            }
+        }
+
+        function updateStatus() {
+            fetch('/status')
+            .then(res => res.json())
+            .then(data => {
+                let val = document.getElementById("val");
+                val.innerText = data.status;
+                if (data.status === "DROWSY") {
+                    val.className = "drowsy-alert";
+                    speakAlert();
+                } else {
+                    val.className = "";
+                }
+            });
+        }
+
+        function startStream() {
+            document.getElementById('video_feed').src = "{{ url_for('video_feed') }}";
+            document.getElementById('video_feed').style.display = "block";
+            document.getElementById('placeholder').style.display = "none";
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            poll = setInterval(updateStatus, 1000);
+        }
+
+        function stopStream() {
+            clearInterval(poll);
+            document.getElementById('video_feed').src = "";
+            document.getElementById('video_feed').style.display = "none";
+            document.getElementById('placeholder').style.display = "block";
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('val').innerText = "STOPPED";
+            fetch('/stop_camera');
+        }
+    </script>
+</body>
+</html>

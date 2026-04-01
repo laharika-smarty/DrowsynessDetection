@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account</title>
+
+<style>
+body { 
+    background: #f4f4f4; 
+    font-family: 'Segoe UI', sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+}
+
+.card { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 15px; 
+    width: 100%; 
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    border-top: 5px solid #bf953f; 
+}
+
+h2 { color: #8a6d00; text-align: center; }
+
+input, select { 
+    width: 100%; 
+    padding: 12px; 
+    margin: 8px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    box-sizing: border-box; /* Ensures padding doesn't push width over 100% */
+}
+
+label {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    display: block;
+}
+
+button { 
+    width: 100%; 
+    padding: 14px; 
+    background: linear-gradient(45deg, #bf953f, #b38728); 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #b38728, #8a6d00);
+}
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #8a6d00;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+#preview {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Create Account</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <input type="text" name="username" placeholder="Username" required>
+    
+    <input type="email" name="email" placeholder="Your Email Address" required>
+
+    <input type="email" name="family_email" placeholder="Emergency Contact (Family Email)" required>
+    
+    <input type="password" name="password" placeholder="Password" required>
+
+    <label>Gender:</label>
+    <select name="gender" required>
+        <option value="" disabled selected>Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+    </select>
+
+    <label>Date of Birth:</label>
+    <input type="date" name="dob" required>
+
+    <label>Upload Face Image:</label>
+    <input type="file" name="image" accept="image/*" required onchange="previewImage(event)">
+
+    <img id="preview">
+
+    <button type="submit">Register</button>
+</form>
+<div style="margin-top: 20px; font-size: 0.9rem; color: #555; text-align: center;">
+    Already have account? <a href="{{ url_for('login') }}" style="color: #8a6d00; text-decoration: none; font-weight: bold;">Login</a>
+</div>
+
+<div style="margin-top: 20px; font-size: 0.9rem; color: #555; text-align: center;">
+     <a href="{{ url_for('home') }}" style="color: #8a6d00; text-decoration: none; font-weight: bold;">HOME🏠</a>
+</div>
+
+</div>
+
+<script>
+function previewImage(event) {
+    let reader = new FileReader();
+    reader.onload = function(){
+        let output = document.getElementById('preview');
+        output.src = reader.result;
+        output.style.display = "block";
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+
+</body>
+</html>

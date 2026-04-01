@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Drowsiness System</title>
+    <style>
+        :root {
+            --gold-gradient: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728);
+            --dark-gold: #8a6d00;
+            --dark-wine: #580000; /* Deep Dark Wine Color */
+        }
+
+        /* Click Box/Outline Fix */
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('/static/images/img.gif'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .about-card {
+             /* Semi-transparent white card */
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 800px;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border-top: 6px solid var(--dark-wine); /* Wine border instead of gold */
+            text-align: center;
+            box-sizing: border-box;
+            transition: 0.4s ease;
+        }
+
+        h1 {
+            color: var(--dark-wine);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            /* Halka sa shadow taaki text pop kare */
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        p {
+            color: var(--dark-wine);
+            line-height: 1.6;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border: 1px solid rgba(88, 0, 0, 0.2);
+            border-radius: 10px;
+            flex: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .feature-box h3 {
+            color: var(--dark-wine);
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .feature-box p {
+            font-size: 0.85rem;
+            color: #4a0000; /* Slightly lighter wine for description */
+        }
+
+        .tech-stack {
+            margin-top: 30px;
+            font-weight: bold;
+            color: var(--dark-wine);
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(88, 0, 0, 0.1);
+            padding-top: 20px;
+        }
+
+        .btn-home {
+            margin-top: 40px;
+            text-decoration: none;
+            color: white;
+            background: var(--dark-wine);
+            font-weight: bold;
+            padding: 12px 30px;
+            border: 2px solid var(--dark-wine);
+            border-radius: 30px;
+            transition: 0.3s;
+            display: inline-block;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .btn-home:hover {
+            background: transparent;
+            color: var(--dark-wine);
+        }
+
+        /* Mobile View */
+        @media (max-width: 650px) {
+            .features {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="about-card">
+        <h1>About the Project</h1>
+        <p>
+            The <strong>Drowsiness Detection System</strong> is a safety-focused application designed to prevent accidents caused by fatigue. 
+            By using real-time computer vision, the system monitors the user's eye movements and alerts them immediately if signs of sleepiness are detected.
+        </p>
+
+        <div class="features">
+            <div class="feature-box">
+                <h3>Real-time Monitoring</h3>
+                <p>Continuous face and eye tracking using high-speed YOLO algorithms.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Instant Alerts</h3>
+                <p>Audio warnings to wake up the user when eyes are closed for too long.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Secure Access</h3>
+                <p>SQL-backed user profiles and admin-only database management.</p>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            Technologies Used: Python | Flask | YOLO | OpenCV | SQLite3
+        </div>
+
+        <a href="{{ url_for('home') }}" class="btn-home">Back to Homepage</a>
+    </div>
+
+</body>
+</html>

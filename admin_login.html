@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access</title>
+    <style>
+        body { 
+            background: #f4f4f4; 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px;
+            box-sizing: border-box;
+            /* Mobile tap highlight remove */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            width: 100%;
+            max-width: 350px; /* Laptop par neat size */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            transition: 0.4s; 
+            border-top: 5px solid #8a6d00; 
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* Hover effect for Desktop */
+        @media (hover: hover) {
+            .card:hover { 
+                transform: translateY(-10px); 
+                box-shadow: 0 20px 40px rgba(138, 109, 0, 0.3); 
+            }
+        }
+
+        h2 { color: #8a6d00; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 2px; }
+
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+            font-size: 16px; /* Mobile auto-zoom fix */
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #8a6d00;
+        }
+
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background: #8a6d00; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px;
+            margin-top: 10px;
+            transition: opacity 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+            opacity: 0.8;
+            transform: scale(0.98);
+        }
+
+        .back { 
+            display: block; 
+            margin-top: 20px; 
+            color: #666; 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back:hover {
+            color: #8a6d00;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Admin Login</h2>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Admin Username" required>
+            <input type="password" name="password" placeholder="Admin Password" required>
+            <button type="submit">Unlock Database</button>
+        </form>
+        <a href="{{ url_for('home') }}" class="back">← Back to Home</a>
+    </div>
+</body>
+</html>
