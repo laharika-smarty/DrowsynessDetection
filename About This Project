@@ -1,0 +1,98 @@
+ Driver Drowsiness Detection System
+
+Overview
+The Driver Drowsiness Detection System is an intelligent safety application that detects driver fatigue in real-time using computer vision and deep learning techniques. The system monitors eye closure and facial features through a webcam and alerts the driver when signs of drowsiness are detected.
+
+ Features
+*  Real-time eye tracking using webcam
+*  Instant alert system (sound/alarm)
+*  Deep learning-based detection (YOLO / CNN)
+*  Admin dashboard (if included)
+*  User registration and login system
+*  Database integration for storing user data
+
+ Technologies Used
+
+* Frontend: HTML, CSS, JavaScript
+* Backend: Python (Flask)
+* Database: SQLite / MySQL
+* Libraries & Tools:
+  * OpenCV
+  * TensorFlow / Keras
+  * YOLO (You Only Look Once)
+  * NumPy
+
+Project Structure
+DrowsynessDetection/
+│── static/              # CSS, JS, images
+│── templates/           # HTML pages
+│── models/              # Trained models
+│── app.py               # Main Flask application
+│── database.db          # Database file
+│── requirements.txt     # Dependencies
+│── README.md            # Project documentation
+
+ Installation & Setup
+
+1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/laharika-smarty/DrowsynessDetection.git
+cd DrowsynessDetection
+```
+
+ 2️⃣ Create virtual environment (optional but recommended)
+
+```bash
+python -m venv venv
+venv\Scripts\activate   # On Windows
+```
+
+ 3️⃣ Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+ 4️⃣ Run the application
+
+```bash
+python app.py
+```
+
+ 5️⃣ Open in browser
+
+```
+http://127.0.0.1:5000/
+```
+
+How It Works
+1. The webcam captures live video of the driver
+2. The system detects facial landmarks and eye movements
+3. If eyes remain closed for a certain duration → drowsiness detected
+4. An alert sound is triggered to wake the driver
+
+
+ Future Enhancements
+
+*  Mobile app integration
+*  Cloud-based monitoring
+*  Integration with vehicle systems
+*  Improved accuracy using advanced AI models
+
+
+ Contributors
+* Shazia Haqqani
+* R. Akshaya
+* T. Laharika
+* Tasmiya Maheen
+
+ License
+This project is for academic purposes. You can modify and use it as needed.
+
+ Acknowledgements
+
+* OpenCV community
+* YOLO research contributors
+* TensorFlow/Keras documentation
+
